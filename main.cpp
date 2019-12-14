@@ -332,13 +332,14 @@ void Tank::initBuffer() {
 
 }
 
-Tank tank(programID);
+Tank player2(programID);
+Tank player1(programID);
 int main(int argc, char** argv) {
 	//윈도우 생성하기
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowPosition(100, 100);
-	glutInitWindowSize(800, 600);
+	glutInitWindowSize(1280, 800);
 	glutCreateWindow("tan vs k");
 
 	glewExperimental = GL_TRUE;
@@ -350,10 +351,10 @@ int main(int argc, char** argv) {
 	else
 		std::cout << "GLEW Initialized\n";
 	setshader();
-	tank.initBuffer();
+	player1.initBuffer();
+	player2.initBuffer();
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(Keyboard);
-	glutReshapeFunc(Reshape);
 	glutMainLoop();
 }
 char* filetobuf(const char* file) {
@@ -427,22 +428,21 @@ void drawScene()
 
 
 	glEnable(GL_DEPTH_TEST);
+	glViewport(0, 0, 640, 800);
 
-	tank.Draw();
-
-
+	player1.Draw();
+	glViewport(640, 0, 640, 800);
+	
+	player2.Draw();
 
 	glutSwapBuffers();
 
-}
-void Reshape(int w, int h) {
-	glViewport(0, 0, w, h);
 }
 
 void Keyboard(unsigned char key, int x, int y) {
 	switch (key)
 	{
-	case 'l':
+	case 'L':
 		if (line) {
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			line = !line;
@@ -452,25 +452,44 @@ void Keyboard(unsigned char key, int x, int y) {
 			line = !line;
 		}
 	case 'w':
-		tank.trans_Z -= 0.5;
+		player1.trans_Z -= 0.5;
 		break;
 	case 'a':
-		tank.trans_X -= 0.5;
+		player1.trans_X -= 0.5;
 		break;
 	case 's':
-		tank.trans_Z += 0.5;
+		player1.trans_Z += 0.5;
 		break;
 	case 'd':
-		tank.trans_X += 0.5;
+		player1.trans_X += 0.5;
 		break;
 	case 'q':
-		tank.Head_rot += 5.0f;
+		player1.Head_rot += 5.0f;
 		break;
 
 	case 'e':
-		tank.Head_rot -= 5.0f;
+		player1.Head_rot -= 5.0f;
 		break;
 
+
+	case 'i':
+		player2.trans_Z -= 0.5;
+		break;
+	case 'j':
+		player2.trans_X -= 0.5;
+		break;
+	case 'k':
+		player2.trans_Z += 0.5;
+		break;
+	case 'l':
+		player2.trans_X += 0.5;
+		break;
+	case 'u':
+		player2.Head_rot += 5.0f;
+		break;
+	case 'o':
+		player2.Head_rot -= 5.0f;
+		break;
 	}
 
 	glutPostRedisplay();
