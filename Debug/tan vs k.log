@@ -1,0 +1,6 @@
+﻿  main.cpp
+D:\Programming\tan vs k\tan vs k\main.cpp(31,1): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(41,1): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(64,1): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(114,1): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+  tan vs k.vcxproj -> D:\Programming\tan vs k\Debug\tan vs k.exe
