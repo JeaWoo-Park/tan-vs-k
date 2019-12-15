@@ -134,9 +134,111 @@ public:
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 	}
 };
+class Obstacle {
+private:
+	glm::mat4 Matrix = glm::mat4(1.0f);
 
+	glm::mat4 transMatrix = glm::mat4(1.0f);
+	glm::mat4 scaleMatrix = glm::mat4(1.0f);
+	glm::mat4 projection = glm::mat4(1.0f);
+	glm::mat4 view = glm::mat4(1.0f);
 
+	unsigned int transformLocation;
+	unsigned int viewLocation;
+	unsigned int projectionLocation;
+	GLuint ID = nomal_shader_ID;
+	GLuint VBOpos, VBOcolor, VAO;
+	GLuint EBO;
+	float obstacle_color_list[24] = {
+		0.5,0.5,0.5,
+		0.5,0.5,0.5,
+		0.5,0.5,0.5,
+		0.5,0.5,0.5,
+		0.5,0.5,0.5,
+		0.5,0.5,0.5,
+		0.5,0.5,0.5,
+		0.5,0.5,0.5
+	};
+	float obstacle_vertex_list[24] = {
+		-1, 1, -1,
+		-1, 1, 1,
+		1, 1, 1,
+		1, 1, -1,
+		-1, 0, -1,
+		-1, 0, 1,
+		1, 0, 1,
+		1, 0, -1,
+	};
+	int obstacle_index_list[36] = {
+		0,1,3,
+		3,1,2,
+		//-------------위
+		5,2,1,
+		5,6,2,
+		//-------------앞
+		4,6,5,
+		6,4,7,
+		//-------------아래
+		0,3,7,
+		0,7,4,
+		//-------------뒤
+		0,4,5,
+		0,5,1,
+		//-------------왼
+		6,3,2,
+		6,7,3
+		//-------------오른
+	};
+public:
+	float Trans_X = 0;
+	float Trans_Y = 0;
+	float Trans_Z = 0;
+	Obstacle(float x, float z) : Trans_X(x), Trans_Z(z) {
+		Matrix = glm::translate(Matrix, glm::vec3(Trans_X, Trans_Y, Trans_Z));
+	}
+	void initBuffer() {
+		glUseProgram(ID);
+		glGenVertexArrays(1, &VAO);
+		glBindVertexArray(VAO);
 
+		glGenBuffers(1, &VBOcolor);
+		glBindBuffer(GL_ARRAY_BUFFER, VBOcolor);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(obstacle_color_list), obstacle_color_list, GL_STATIC_DRAW);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+		glEnableVertexAttribArray(1);
+
+		glGenBuffers(1, &VBOpos);
+		glBindBuffer(GL_ARRAY_BUFFER, VBOpos);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(obstacle_vertex_list), obstacle_vertex_list, GL_STATIC_DRAW);
+
+		glGenBuffers(1, &EBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(obstacle_index_list), obstacle_index_list, GL_STATIC_DRAW);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+		glEnableVertexAttribArray(0);
+	}
+	void Draw() {
+
+		glUseProgram(ID);
+		glBindVertexArray(VAO);
+
+		projection = glm::mat4(1.0f);
+		projection = glm::perspective(glm::radians(45.0f), (float)1280.0 / (float)800.0, 0.1f, 100.0f);
+		view = glm::lookAt(cameraPos, cameraDirection, cameraUP);
+
+		transformLocation = glGetUniformLocation(complie_shaders(), "transform");
+		glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(Matrix));
+
+		viewLocation = glGetUniformLocation(nomal_shader_ID, "viewTransform");
+		glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
+
+		projectionLocation = glGetUniformLocation(nomal_shader_ID, "projectionTransform");
+		glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
+
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+	}
+
+};
 class Tank1 {
 private:
 	glm::mat4 HeadMatrix = glm::mat4(1.0f);
@@ -176,7 +278,7 @@ private:
 		-0.2, 0.0, -0.132,
 		-0.2, 0.0, 0.132,
 		0.2, 0.0, 0.132,
-		0.2, 0.0, -0.132,
+		0.2, 0.0, -0.132
 	};
 	float tank_body_vertex_list[60] = {
 		-0.4, 0.0, -0.266,
@@ -306,11 +408,11 @@ private:
 public:
 
 
-	float Head_rot = 0;
+	float Head_rot = 135;
 
-	float trans_X = 0;
+	float trans_X = 8;
 	float trans_Y = 0.3;
-	float trans_Z = 0;
+	float trans_Z = 8;
 
 	float Body_rot = 0;
 		  
@@ -472,7 +574,6 @@ void Tank1::initBuffer() {
 	glEnableVertexAttribArray(0);
 
 }
-
 class Tank2 {
 private:
 	glm::mat4 HeadMatrix = glm::mat4(1.0f);
@@ -640,11 +741,11 @@ private:
 
 
 public:
-	float Head_rot = 0;
+	float Head_rot = -45;
 
-	float trans_X = 0;
+	float trans_X = -8;
 	float trans_Y = 0.3;
-	float trans_Z = 0;
+	float trans_Z = -8;
 
 	float Body_rot = 0;
 
@@ -739,7 +840,6 @@ public:
 		Draw_Body();
 	}
 };
-
 void Tank2::initBuffer() {
 	glUseProgram(ID);
 	glGenVertexArrays(1, &Barrel_VAO);
@@ -811,9 +911,12 @@ void Tank2::initBuffer() {
 }
 
 
+
 Tank2 player2(nomal_shader_ID);
 Tank1 player1(nomal_shader_ID);
 Map map;
+Obstacle ob[6] = { {-6,-6}, {-7,-6}, {-6,-7}, {6,6}, {7,6}, {6,7} };
+
 
 int main(int argc, char** argv) {
 	//윈도우 생성하기
@@ -836,6 +939,9 @@ int main(int argc, char** argv) {
 	player2.initBuffer();
 	map.inittexture();
 	map.initBuffer();
+	for (int i = 0; i < 6; ++i) {
+		ob[i].initBuffer();
+	}
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(Keyboard);
 	glutTimerFunc(10, Timer, 1);
@@ -957,12 +1063,14 @@ void drawScene()
 	x = cos(glm::radians(player1.Head_rot));
 	z = sin(glm::radians(player1.Head_rot));
 	cameraPos = glm::vec3(-(2 * cos(-glm::radians(player1.Head_rot))) + player1.trans_X, player1.trans_Y + 0.5 ,-(2 * sin(-glm::radians(player1.Head_rot))) + player1.trans_Z);
-	std::cout << player1.Head_rot << ' ' << x << ' ' << z << std::endl;
 	cameraDirection = glm::vec3( player1.trans_X, player1.trans_Y, player1.trans_Z);
 	cameraUP = glm::vec3(0.0f, 0.5f, 0.0f);
 	player1.Draw();
 	player2.Draw();
 	map.Draw();
+	for (int i = 0; i < 6; ++i) {
+		ob[i].Draw();
+	}
 	glViewport(640, 0, 640, 800);
 	cameraPos = glm::vec3(-(2 * cos(-glm::radians(player2.Head_rot))) + player2.trans_X, player2.trans_Y + 0.5, -(2 * sin(-glm::radians(player2.Head_rot))) + player2.trans_Z);
 	cameraDirection = glm::vec3(player2.trans_X, player2.trans_Y, player2.trans_Z);
@@ -970,6 +1078,9 @@ void drawScene()
 	player1.Draw();
 	player2.Draw();
 	map.Draw();
+	for (int i = 0; i < 6; ++i) {
+		ob[i].Draw();
+	};
 
 
 	glutSwapBuffers();

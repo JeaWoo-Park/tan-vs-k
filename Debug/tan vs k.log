@@ -1,30 +1,30 @@
 ﻿  main.cpp
-D:\Programming\tan vs k\tan vs k\main.cpp(170,3): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(180,3): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(203,3): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(253,3): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(312,21): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(506,3): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(516,3): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(539,3): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(589,3): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(646,21): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(1003,67): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(1004,68): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(1008,68): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(1009,67): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(1017,73): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(1018,72): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(1022,73): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(1023,72): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(1065,67): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(1066,68): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(1070,68): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(1071,67): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(1078,73): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(1079,72): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(1083,73): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(1084,72): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Programming\tan vs k\tan vs k\main.cpp(1047,4): warning C4390: ';': 제어된 빈 문이 있습니다. 이 문이 필요합니까?
-D:\Programming\tan vs k\tan vs k\main.cpp(1100,4): warning C4390: ';': 제어된 빈 문이 있습니다. 이 문이 필요합니까?
+D:\Programming\tan vs k\tan vs k\main.cpp(272,3): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(282,3): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(305,3): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(355,3): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(414,21): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(607,3): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(617,3): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(640,3): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(690,3): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(747,21): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(1114,67): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(1115,68): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(1119,68): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(1120,67): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(1128,73): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(1129,72): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(1133,73): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(1134,72): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(1176,67): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(1177,68): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(1181,68): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(1182,67): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(1189,73): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(1190,72): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(1194,73): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(1195,72): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Programming\tan vs k\tan vs k\main.cpp(1158,4): warning C4390: ';': 제어된 빈 문이 있습니다. 이 문이 필요합니까?
+D:\Programming\tan vs k\tan vs k\main.cpp(1211,4): warning C4390: ';': 제어된 빈 문이 있습니다. 이 문이 필요합니까?
   tan vs k.vcxproj -> D:\Programming\tan vs k\Debug\tan vs k.exe
