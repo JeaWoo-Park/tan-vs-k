@@ -37,6 +37,54 @@ glm::vec3 cameraPos;
 glm::vec3 cameraDirection;
 glm::vec3 cameraUP;
 
+struct bb {
+	float left, top, right, bottom;
+};
+
+bb interbb;
+
+bool collide(bb* interbb, bb a, bb b) {
+	if (a.top <= b.bottom &&
+		a.right >= b.left &&
+		a.left <= b.right &&
+		a.bottom >= b.top)
+	{
+		// top
+		if (a.top > b.top)
+			interbb->top = a.top;
+		else
+			interbb->top = b.top;
+		// bottom
+		if (a.bottom < b.bottom)
+			interbb->bottom = a.bottom;
+		else
+			interbb->bottom = b.bottom;
+		// left
+		if (a.left > b.left)
+			interbb->left = a.left;
+		else
+			interbb->left = b.left;
+		if (a.right < b.right)
+			interbb->right = a.right;
+		else
+			interbb->right = b.right;
+		return true;
+	}
+	else
+		return false;
+}
+
+
+void Set_bb(bb* rect, float left, float top, float right, float bottom) {
+	rect->right = right;
+	rect->top = top;
+	rect->left = left;
+	rect->bottom = bottom;
+
+}
+
+
+
 class Map {
 private:
 	unsigned int transformLocation;
@@ -49,14 +97,14 @@ private:
 	GLuint VAO[2], VBOpos, VBOcolor, VBOtexture, EBO, VBO[2];
 	GLuint ID = texture_shader_ID;
 	float floor_data_list1[24] = {
-		-10, 0 ,-10,1,0,1,	0,1,
-		-10, 0, 10,	1,0,1,	0,0,
-		10, 0, -10,	1,0,1,	1,1
+	   -10, 0 ,-10,1,0,1,   0,1,
+	   -10, 0, 10,   1,0,1,   0,0,
+	   10, 0, -10,   1,0,1,   1,1
 	};
 	float floor_data_list2[24] = {
-		10, 0, 10,	1,0,1,	1,0,
-		10, 0, -10,	1,0,1,	1,1,
-		-10, 0, 10,	1,0,1,	0,0
+	   10, 0, 10,   1,0,1,   1,0,
+	   10, 0, -10,   1,0,1,   1,1,
+	   -10, 0, 10,   1,0,1,   0,0
 	};
 
 public:
@@ -91,7 +139,7 @@ public:
 	}
 	void inittexture() {
 		int width, height, channel;
-		
+
 		glGenTextures(1, &texture);
 		glBindTexture(GL_TEXTURE_2D, texture);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -107,12 +155,12 @@ public:
 	}
 	void Draw() {
 		glUseProgram(complie_texture());
-		
+
 
 		projection = glm::mat4(1.0f);
 		projection = glm::perspective(glm::radians(45.0f), (float)1280.0 / (float)800.0, 0.1f, 100.0f);
 		view = glm::lookAt(cameraPos, cameraDirection, cameraUP);
-		Matrix = glm::mat4(1.0f);	// 단위행렬로초기화 
+		Matrix = glm::mat4(1.0f);   // 단위행렬로초기화 
 		transformLocation = glGetUniformLocation(complie_texture(), "transform");
 		glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(Matrix));
 
@@ -124,7 +172,7 @@ public:
 
 
 		glBindVertexArray(VAO[0]);
-		
+
 		glBindTexture(GL_TEXTURE_2D, texture);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -150,51 +198,51 @@ private:
 	GLuint VBOpos, VBOcolor, VAO;
 	GLuint EBO;
 	float obstacle_color_list[24] = {
-		0.5,0.5,0.5,
-		0.5,0.5,0.5,
-		0.5,0.5,0.5,
-		0.5,0.5,0.5,
-		0.5,0.5,0.5,
-		0.5,0.5,0.5,
-		0.5,0.5,0.5,
-		0.5,0.5,0.5
+	   0.5,0.5,0.5,
+	   0.5,0.5,0.5,
+	   0.5,0.5,0.5,
+	   0.5,0.5,0.5,
+	   0.5,0.5,0.5,
+	   0.5,0.5,0.5,
+	   0.5,0.5,0.5,
+	   0.5,0.5,0.5
 	};
 	float obstacle_vertex_list[24] = {
-		-1, 1, -1,
-		-1, 1, 1,
-		1, 1, 1,
-		1, 1, -1,
-		-1, 0, -1,
-		-1, 0, 1,
-		1, 0, 1,
-		1, 0, -1,
+	   -1, 0.5, -1,
+	   -1, 0.5, 1,
+	   1, 0.5, 1,
+	   1, 0.5, -1,
+	   -1, 0, -1,
+	   -1, 0, 1,
+	   1, 0, 1,
+	   1, 0, -1,
 	};
 	int obstacle_index_list[36] = {
-		0,1,3,
-		3,1,2,
-		//-------------위
-		5,2,1,
-		5,6,2,
-		//-------------앞
-		4,6,5,
-		6,4,7,
-		//-------------아래
-		0,3,7,
-		0,7,4,
-		//-------------뒤
-		0,4,5,
-		0,5,1,
-		//-------------왼
-		6,3,2,
-		6,7,3
-		//-------------오른
+	   0,1,3,
+	   3,1,2,
+	   //-------------위
+	   5,2,1,
+	   5,6,2,
+	   //-------------앞
+	   4,6,5,
+	   6,4,7,
+	   //-------------아래
+	   0,3,7,
+	   0,7,4,
+	   //-------------뒤
+	   0,4,5,
+	   0,5,1,
+	   //-------------왼
+	   6,3,2,
+	   6,7,3
+	   //-------------오른
 	};
 public:
-	float Trans_X = 0;
-	float Trans_Y = 0;
-	float Trans_Z = 0;
-	Obstacle(float x, float z) : Trans_X(x), Trans_Z(z) {
-		Matrix = glm::translate(Matrix, glm::vec3(Trans_X, Trans_Y, Trans_Z));
+	float trans_X = 0;
+	float trans_Y = 0;
+	float trans_Z = 0;
+	Obstacle(float x, float z) : trans_X(x), trans_Z(z) {
+		Matrix = glm::translate(Matrix, glm::vec3(trans_X, trans_Y, trans_Z));
 	}
 	void initBuffer() {
 		glUseProgram(ID);
@@ -237,7 +285,116 @@ public:
 
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 	}
+	bb get_bb() const {
+		return bb{ float(trans_X - 1), float(trans_Z - 1),float(trans_X + 1),float(trans_Z + 1) };
+	}
+};
+class BrokenObstacle {
+private:
+	glm::mat4 Matrix = glm::mat4(1.0f);
 
+	glm::mat4 transMatrix = glm::mat4(1.0f);
+	glm::mat4 scaleMatrix = glm::mat4(1.0f);
+	glm::mat4 projection = glm::mat4(1.0f);
+	glm::mat4 view = glm::mat4(1.0f);
+
+	unsigned int transformLocation;
+	unsigned int viewLocation;
+	unsigned int projectionLocation;
+	GLuint ID = nomal_shader_ID;
+	GLuint VBOpos, VBOcolor, VAO;
+	GLuint EBO;
+	float obstacle_color_list[24] = {
+	   0.8,0.8,0.8,
+	   0.8,0.8,0.8,
+	   0.8,0.8,0.8,
+	   0.8,0.8,0.8,
+	   0.8,0.8,0.8,
+	   0.8,0.8,0.8,
+	   0.8,0.8,0.8,
+	   0.8,0.8,0.8
+	};
+	float obstacle_vertex_list[24] = {
+	   -1, 0.5, -1,
+	   -1, 0.5, 1,
+	   1, 0.5, 1,
+	   1, 0.5, -1,
+	   -1, 0, -1,
+	   -1, 0, 1,
+	   1, 0, 1,
+	   1, 0, -1,
+	};
+	int obstacle_index_list[36] = {
+	   0,1,3,
+	   3,1,2,
+	   //-------------위
+	   5,2,1,
+	   5,6,2,
+	   //-------------앞
+	   4,6,5,
+	   6,4,7,
+	   //-------------아래
+	   0,3,7,
+	   0,7,4,
+	   //-------------뒤
+	   0,4,5,
+	   0,5,1,
+	   //-------------왼
+	   6,3,2,
+	   6,7,3
+	   //-------------오른
+	};
+public:
+	float trans_X = 0;
+	float trans_Y = 0;
+	float trans_Z = 0;
+	BrokenObstacle(float x, float z) : trans_X(x), trans_Z(z) {
+		Matrix = glm::translate(Matrix, glm::vec3(trans_X, trans_Y, trans_Z));
+	}
+	void initBuffer() {
+		glUseProgram(ID);
+		glGenVertexArrays(1, &VAO);
+		glBindVertexArray(VAO);
+
+		glGenBuffers(1, &VBOcolor);
+		glBindBuffer(GL_ARRAY_BUFFER, VBOcolor);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(obstacle_color_list), obstacle_color_list, GL_STATIC_DRAW);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+		glEnableVertexAttribArray(1);
+
+		glGenBuffers(1, &VBOpos);
+		glBindBuffer(GL_ARRAY_BUFFER, VBOpos);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(obstacle_vertex_list), obstacle_vertex_list, GL_STATIC_DRAW);
+
+		glGenBuffers(1, &EBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(obstacle_index_list), obstacle_index_list, GL_STATIC_DRAW);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+		glEnableVertexAttribArray(0);
+	}
+	void Draw() {
+
+		glUseProgram(ID);
+		glBindVertexArray(VAO);
+
+		projection = glm::mat4(1.0f);
+		projection = glm::perspective(glm::radians(45.0f), (float)1280.0 / (float)800.0, 0.1f, 100.0f);
+		view = glm::lookAt(cameraPos, cameraDirection, cameraUP);
+
+		transformLocation = glGetUniformLocation(complie_shaders(), "transform");
+		glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(Matrix));
+
+		viewLocation = glGetUniformLocation(nomal_shader_ID, "viewTransform");
+		glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
+
+		projectionLocation = glGetUniformLocation(nomal_shader_ID, "projectionTransform");
+		glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
+
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+	}
+	bb get_bb() const {
+		return bb{ float(trans_X - 1), float(trans_Z - 1),float(trans_X + 1),float(trans_Z + 1) };
+	}
 };
 class Tank1 {
 private:
@@ -261,147 +418,147 @@ private:
 	GLuint Barrel_EBO, Head_EBO, Body_EBO;
 
 	float tank_barrel_vertex_list[24] = {
-	0.133, 0.132, -0.033,	// 0
-	0.133, 0.132, 0.033,	// 1
-	0.733, 0.132, 0.033,	// 2
-	0.733, 0.132, -0.033,	// 3
-	0.166, 0.066, -0.033,	// 4
-	0.166, 0.066, 0.033,	// 5
-	0.733, 0.066, 0.033,	// 6
-	0.733, 0.066, -0.033	// 7
+	0.133, 0.132, -0.033,   // 0
+	0.133, 0.132, 0.033,   // 1
+	0.733, 0.132, 0.033,   // 2
+	0.733, 0.132, -0.033,   // 3
+	0.166, 0.066, -0.033,   // 4
+	0.166, 0.066, 0.033,   // 5
+	0.733, 0.066, 0.033,   // 6
+	0.733, 0.066, -0.033   // 7
 	};
 	float tank_head_vertex_list[24] = {
-		-0.1, 0.2, -0.066,
-		-0.1, 0.2, 0.066,
-		0.1, 0.2, 0.066,
-		0.1, 0.2, -0.066,
-		-0.2, 0.0, -0.132,
-		-0.2, 0.0, 0.132,
-		0.2, 0.0, 0.132,
-		0.2, 0.0, -0.132
+	   -0.1, 0.2, -0.066,
+	   -0.1, 0.2, 0.066,
+	   0.1, 0.2, 0.066,
+	   0.1, 0.2, -0.066,
+	   -0.2, 0.0, -0.132,
+	   -0.2, 0.0, 0.132,
+	   0.2, 0.0, 0.132,
+	   0.2, 0.0, -0.132
 	};
 	float tank_body_vertex_list[60] = {
-		-0.4, 0.0, -0.266,
-		-0.4, 0.0, 0.266,//
-		0.4, 0.0, 0.266,//
-		0.4, 0.0, -0.266,
-		-0.5, -0.3, -0.266,
-		-0.5, -0.3, 0.266,//
-		0.5, -0.3, 0.266,//
-		0.5, -0.3, -0.266,
-		-0.466, -0.2, -0.18,
-		-0.466, -0.2, 0.18,
-		0.466, -0.2, 0.18,
-		0.466, -0.2, -0.18,
-		-0.5, -0.3, -0.18,
-		-0.5, -0.3, 0.18,
-		0.5, -0.3, 0.18,
-		0.5, -0.3, -0.18,
-		//------------------
-		-0.4, 0.0, -0.18,
-		-0.4, 0.0, 0.18,
-		0.4, 0.0, 0.18,
-		0.4, 0.0, -0.18,
+	   -0.4, 0.0, -0.266,
+	   -0.4, 0.0, 0.266,//
+	   0.4, 0.0, 0.266,//
+	   0.4, 0.0, -0.266,
+	   -0.5, -0.3, -0.266,
+	   -0.5, -0.3, 0.266,//
+	   0.5, -0.3, 0.266,//
+	   0.5, -0.3, -0.266,
+	   -0.466, -0.2, -0.18,
+	   -0.466, -0.2, 0.18,
+	   0.466, -0.2, 0.18,
+	   0.466, -0.2, -0.18,
+	   -0.5, -0.3, -0.18,
+	   -0.5, -0.3, 0.18,
+	   0.5, -0.3, 0.18,
+	   0.5, -0.3, -0.18,
+	   //------------------
+	   -0.4, 0.0, -0.18,
+	   -0.4, 0.0, 0.18,
+	   0.4, 0.0, 0.18,
+	   0.4, 0.0, -0.18,
 	};
 	float tank_barrel_color_list[24] = {
-		1,1,0,
-		1,1,0,
-		1,1,0,
-		1,1,0,
-		1,1,0,
-		1,1,0,
-		1,1,0,
-		1,1,0
+	   1,1,0,
+	   1,1,0,
+	   1,1,0,
+	   1,1,0,
+	   1,1,0,
+	   1,1,0,
+	   1,1,0,
+	   1,1,0
 	};
 	float tank_head_color_list[24] = {
-		1,1,0,
-		1,1,0,
-		1,1,0,
-		1,1,0,
-		1,1,0,
-		1,1,0,
-		1,1,0,
-		1,1,0
+	   1,1,0,
+	   1,1,0,
+	   1,1,0,
+	   1,1,0,
+	   1,1,0,
+	   1,1,0,
+	   1,1,0,
+	   1,1,0
 	};
 	float tank_body_color_list[84] = {
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,1,
-		0,0.8,1,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,1,
-		0,0.8,1,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,1,
-		0,0.8,1,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,1,
-		0,0.8,1,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,1,
-		0,0.8,1,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,0
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,1,
+	   0,0.8,1,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,1,
+	   0,0.8,1,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,1,
+	   0,0.8,1,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,1,
+	   0,0.8,1,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,1,
+	   0,0.8,1,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,0
 	};
 	int tank_head_index_list[36] = {
-		0,1,3,
-		3,1,2,
-		//-------------위
-		5,2,1,
-		5,6,2,
-		//-------------앞
-		4,6,5,
-		6,4,7,
-		//-------------아래
-		0,3,7,
-		0,7,4,
-		//-------------뒤
-		0,4,5,
-		0,5,1,
-		//-------------왼
-		6,3,2,
-		6,7,3
-		//-------------오른
+	   0,1,3,
+	   3,1,2,
+	   //-------------위
+	   5,2,1,
+	   5,6,2,
+	   //-------------앞
+	   4,6,5,
+	   6,4,7,
+	   //-------------아래
+	   0,3,7,
+	   0,7,4,
+	   //-------------뒤
+	   0,4,5,
+	   0,5,1,
+	   //-------------왼
+	   6,3,2,
+	   6,7,3
+	   //-------------오른
 	};
 	int tank_body_index_list[84] = {
-		1,5,2,
-		2,5,6,
-		3,1,2,
-		0,1,3,
-		3,7,0,
-		0,7,4,
-		2,6,18,
-		18,6,14,
-		18,10,19,
-		19,10,11,
-		19,15,3,
-		3,15,7,
-		0,4,16,
-		16,4,12,
-		16,8,17,
-		17,8,9,
-		17,13,1,
-		1,13,5,
-		8,12,11,
-		11,12,15,
-		9,8,10,
-		10,8,11,
-		10,14,9,
-		9,14,13,
-		7,15,4,
-		4,15,12,
-		14,6,13,
-		13,6,5
+	   1,5,2,
+	   2,5,6,
+	   3,1,2,
+	   0,1,3,
+	   3,7,0,
+	   0,7,4,
+	   2,6,18,
+	   18,6,14,
+	   18,10,19,
+	   19,10,11,
+	   19,15,3,
+	   3,15,7,
+	   0,4,16,
+	   16,4,12,
+	   16,8,17,
+	   17,8,9,
+	   17,13,1,
+	   1,13,5,
+	   8,12,11,
+	   11,12,15,
+	   9,8,10,
+	   10,8,11,
+	   10,14,9,
+	   9,14,13,
+	   7,15,4,
+	   4,15,12,
+	   14,6,13,
+	   13,6,5
 	};
 
 
@@ -415,7 +572,7 @@ public:
 	float trans_Z = 8;
 
 	float Body_rot = 0;
-		  
+
 	void initBuffer();
 
 	void Draw_Barrel() {
@@ -425,7 +582,7 @@ public:
 		projection = glm::mat4(1.0f);
 		projection = glm::perspective(glm::radians(45.0f), (float)1280.0 / (float)800.0, 0.1f, 100.0f);
 		view = glm::lookAt(cameraPos, cameraDirection, cameraUP);
-		HeadMatrix = glm::mat4(1.0f);	// 단위행렬로초기화 
+		HeadMatrix = glm::mat4(1.0f);   // 단위행렬로초기화 
 		HeadMatrix_rotate = glm::mat4(1.0f);
 		transMatrix = glm::mat4(1.0f);
 		scaleMatrix = glm::mat4(1.0f);
@@ -450,7 +607,7 @@ public:
 	void Draw_Head() {
 		glUseProgram(ID);
 		glBindVertexArray(Head_VAO);
-		HeadMatrix = glm::mat4(1.0f);	// 단위행렬로초기화 
+		HeadMatrix = glm::mat4(1.0f);   // 단위행렬로초기화 
 		HeadMatrix_rotate = glm::mat4(1.0f);
 		transMatrix = glm::mat4(1.0f);
 		scaleMatrix = glm::mat4(1.0f);
@@ -475,7 +632,7 @@ public:
 	void Draw_Body() {
 		glUseProgram(ID);
 		glBindVertexArray(Body_VAO);
-		BodyMatrix = glm::mat4(1.0f);	// 단위행렬로초기화 
+		BodyMatrix = glm::mat4(1.0f);   // 단위행렬로초기화 
 		BodyMatrix_rotate = glm::mat4(1.0f);
 		transMatrix = glm::mat4(1.0f);
 		scaleMatrix = glm::mat4(1.0f);
@@ -498,7 +655,9 @@ public:
 	Tank1(GLuint pID) : ID(pID) {
 
 	}
-
+	bb get_bb() const {
+		return bb{ float(trans_X - 0.5), float(trans_Z - 0.5), float(trans_X + 0.5), float(trans_Z + 0.5) };
+	}
 	void Draw() {
 		Draw_Barrel();
 		Draw_Head();
@@ -596,147 +755,147 @@ private:
 	GLuint Barrel_EBO, Head_EBO, Body_EBO;
 
 	float tank_barrel_vertex_list[24] = {
-	0.133, 0.132, -0.033,	// 0
-	0.133, 0.132, 0.033,	// 1
-	0.733, 0.132, 0.033,	// 2
-	0.733, 0.132, -0.033,	// 3
-	0.166, 0.066, -0.033,	// 4
-	0.166, 0.066, 0.033,	// 5
-	0.733, 0.066, 0.033,	// 6
-	0.733, 0.066, -0.033	// 7
+	0.133, 0.132, -0.033,   // 0
+	0.133, 0.132, 0.033,   // 1
+	0.733, 0.132, 0.033,   // 2
+	0.733, 0.132, -0.033,   // 3
+	0.166, 0.066, -0.033,   // 4
+	0.166, 0.066, 0.033,   // 5
+	0.733, 0.066, 0.033,   // 6
+	0.733, 0.066, -0.033   // 7
 	};
 	float tank_head_vertex_list[24] = {
-		-0.1, 0.2, -0.066,
-		-0.1, 0.2, 0.066,
-		0.1, 0.2, 0.066,
-		0.1, 0.2, -0.066,
-		-0.2, 0.0, -0.132,
-		-0.2, 0.0, 0.132,
-		0.2, 0.0, 0.132,
-		0.2, 0.0, -0.132,
+	   -0.1, 0.2, -0.066,
+	   -0.1, 0.2, 0.066,
+	   0.1, 0.2, 0.066,
+	   0.1, 0.2, -0.066,
+	   -0.2, 0.0, -0.132,
+	   -0.2, 0.0, 0.132,
+	   0.2, 0.0, 0.132,
+	   0.2, 0.0, -0.132,
 	};
 	float tank_body_vertex_list[60] = {
-		-0.4, 0.0, -0.266,
-		-0.4, 0.0, 0.266,//
-		0.4, 0.0, 0.266,//
-		0.4, 0.0, -0.266,
-		-0.5, -0.3, -0.266,
-		-0.5, -0.3, 0.266,//
-		0.5, -0.3, 0.266,//
-		0.5, -0.3, -0.266,
-		-0.466, -0.2, -0.18,
-		-0.466, -0.2, 0.18,
-		0.466, -0.2, 0.18,
-		0.466, -0.2, -0.18,
-		-0.5, -0.3, -0.18,
-		-0.5, -0.3, 0.18,
-		0.5, -0.3, 0.18,
-		0.5, -0.3, -0.18,
-		//------------------
-		-0.4, 0.0, -0.18,
-		-0.4, 0.0, 0.18,
-		0.4, 0.0, 0.18,
-		0.4, 0.0, -0.18,
+	   -0.4, 0.0, -0.266,
+	   -0.4, 0.0, 0.266,//
+	   0.4, 0.0, 0.266,//
+	   0.4, 0.0, -0.266,
+	   -0.5, -0.3, -0.266,
+	   -0.5, -0.3, 0.266,//
+	   0.5, -0.3, 0.266,//
+	   0.5, -0.3, -0.266,
+	   -0.466, -0.2, -0.18,
+	   -0.466, -0.2, 0.18,
+	   0.466, -0.2, 0.18,
+	   0.466, -0.2, -0.18,
+	   -0.5, -0.3, -0.18,
+	   -0.5, -0.3, 0.18,
+	   0.5, -0.3, 0.18,
+	   0.5, -0.3, -0.18,
+	   //------------------
+	   -0.4, 0.0, -0.18,
+	   -0.4, 0.0, 0.18,
+	   0.4, 0.0, 0.18,
+	   0.4, 0.0, -0.18,
 	};
 	float tank_barrel_color_list[24] = {
-		0,1,0,
-		0,1,0,
-		0,1,0,
-		0,1,0,
-		0,1,0,
-		0,1,0,
-		0,1,0,
-		0,1,0
+	   0,1,0,
+	   0,1,0,
+	   0,1,0,
+	   0,1,0,
+	   0,1,0,
+	   0,1,0,
+	   0,1,0,
+	   0,1,0
 	};
 	float tank_head_color_list[24] = {
-		0,1,0,
-		0,1,0,
-		0,1,0,
-		0,1,0,
-		0,1,0,
-		0,1,0,
-		0,1,0,
-		0,1,0
+	   0,1,0,
+	   0,1,0,
+	   0,1,0,
+	   0,1,0,
+	   0,1,0,
+	   0,1,0,
+	   0,1,0,
+	   0,1,0
 	};
 	float tank_body_color_list[84] = {
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,1,
-		0,0.8,1,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,1,
-		0,0.8,1,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,1,
-		0,0.8,1,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,1,
-		0,0.8,1,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,1,
-		0,0.8,1,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,0,
-		0,0.8,0
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,1,
+	   0,0.8,1,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,1,
+	   0,0.8,1,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,1,
+	   0,0.8,1,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,1,
+	   0,0.8,1,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,1,
+	   0,0.8,1,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,0,
+	   0,0.8,0
 	};
 	int tank_head_index_list[36] = {
-		0,1,3,
-		3,1,2,
-		//-------------위
-		5,2,1,
-		5,6,2,
-		//-------------앞
-		4,6,5,
-		6,4,7,
-		//-------------아래
-		0,3,7,
-		0,7,4,
-		//-------------뒤
-		0,4,5,
-		0,5,1,
-		//-------------왼
-		6,3,2,
-		6,7,3
-		//-------------오른
+	   0,1,3,
+	   3,1,2,
+	   //-------------위
+	   5,2,1,
+	   5,6,2,
+	   //-------------앞
+	   4,6,5,
+	   6,4,7,
+	   //-------------아래
+	   0,3,7,
+	   0,7,4,
+	   //-------------뒤
+	   0,4,5,
+	   0,5,1,
+	   //-------------왼
+	   6,3,2,
+	   6,7,3
+	   //-------------오른
 	};
 	int tank_body_index_list[84] = {
-		1,5,2,
-		2,5,6,
-		3,1,2,
-		0,1,3,
-		3,7,0,
-		0,7,4,
-		2,6,18,
-		18,6,14,
-		18,10,19,
-		19,10,11,
-		19,15,3,
-		3,15,7,
-		0,4,16,
-		16,4,12,
-		16,8,17,
-		17,8,9,
-		17,13,1,
-		1,13,5,
-		8,12,11,
-		11,12,15,
-		9,8,10,
-		10,8,11,
-		10,14,9,
-		9,14,13,
-		7,15,4,
-		4,15,12,
-		14,6,13,
-		13,6,5
+	   1,5,2,
+	   2,5,6,
+	   3,1,2,
+	   0,1,3,
+	   3,7,0,
+	   0,7,4,
+	   2,6,18,
+	   18,6,14,
+	   18,10,19,
+	   19,10,11,
+	   19,15,3,
+	   3,15,7,
+	   0,4,16,
+	   16,4,12,
+	   16,8,17,
+	   17,8,9,
+	   17,13,1,
+	   1,13,5,
+	   8,12,11,
+	   11,12,15,
+	   9,8,10,
+	   10,8,11,
+	   10,14,9,
+	   9,14,13,
+	   7,15,4,
+	   4,15,12,
+	   14,6,13,
+	   13,6,5
 	};
 
 
@@ -751,7 +910,7 @@ public:
 
 	void initBuffer();
 
-	void Draw_Barrel(){
+	void Draw_Barrel() {
 		glUseProgram(ID);
 		glBindVertexArray(Barrel_VAO);
 
@@ -761,7 +920,7 @@ public:
 
 		view = glm::lookAt(cameraPos, cameraDirection, cameraUP);
 
-		HeadMatrix = glm::mat4(1.0f);	// 단위행렬로초기화 
+		HeadMatrix = glm::mat4(1.0f);   // 단위행렬로초기화 
 		HeadMatrix_rotate = glm::mat4(1.0f);
 		transMatrix = glm::mat4(1.0f);
 		scaleMatrix = glm::mat4(1.0f);
@@ -785,7 +944,7 @@ public:
 	void Draw_Head() {
 		glUseProgram(ID);
 		glBindVertexArray(Head_VAO);
-		HeadMatrix = glm::mat4(1.0f);	// 단위행렬로초기화 
+		HeadMatrix = glm::mat4(1.0f);   // 단위행렬로초기화 
 		HeadMatrix_rotate = glm::mat4(1.0f);
 		transMatrix = glm::mat4(1.0f);
 		scaleMatrix = glm::mat4(1.0f);
@@ -810,7 +969,7 @@ public:
 	void Draw_Body() {
 		glUseProgram(ID);
 		glBindVertexArray(Body_VAO);
-		BodyMatrix = glm::mat4(1.0f);	// 단위행렬로초기화 
+		BodyMatrix = glm::mat4(1.0f);   // 단위행렬로초기화 
 		BodyMatrix_rotate = glm::mat4(1.0f);
 		transMatrix = glm::mat4(1.0f);
 		scaleMatrix = glm::mat4(1.0f);
@@ -838,6 +997,9 @@ public:
 		Draw_Barrel();
 		Draw_Head();
 		Draw_Body();
+	}
+	bb get_bb() const {
+		return bb{ float(trans_X - 0.5), float(trans_Z - 0.5), float(trans_X + 0.5), float(trans_Z + 0.5) };
 	}
 };
 void Tank2::initBuffer() {
@@ -915,8 +1077,8 @@ void Tank2::initBuffer() {
 Tank2 player2(nomal_shader_ID);
 Tank1 player1(nomal_shader_ID);
 Map map;
-Obstacle ob[6] = { {-6,-6}, {-7,-6}, {-6,-7}, {6,6}, {7,6}, {6,7} };
-
+Obstacle ob[6] = { {-5,-5}, {-7,-5}, {-5,-7}, {5,5}, {7,5}, {5,7} };
+BrokenObstacle bob[3]{ {0,0},{5,-5}, {-5,5} };
 
 int main(int argc, char** argv) {
 	//윈도우 생성하기
@@ -942,9 +1104,12 @@ int main(int argc, char** argv) {
 	for (int i = 0; i < 6; ++i) {
 		ob[i].initBuffer();
 	}
+	for (int i = 0; i < 3; ++i) {
+		bob[i].initBuffer();
+	}
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(Keyboard);
-	glutTimerFunc(10, Timer, 1);
+	glutTimerFunc(1, Timer, 1);
 	glutMainLoop();
 }
 char* filetobuf(const char* file) {
@@ -1049,8 +1214,8 @@ void setshader() {
 }
 void drawScene()
 {
-	
-	
+
+
 	glClearColor(1.0, 1.0, 1.0, 1.0f);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1062,14 +1227,17 @@ void drawScene()
 	float z;
 	x = cos(glm::radians(player1.Head_rot));
 	z = sin(glm::radians(player1.Head_rot));
-	cameraPos = glm::vec3(-(2 * cos(-glm::radians(player1.Head_rot))) + player1.trans_X, player1.trans_Y + 0.5 ,-(2 * sin(-glm::radians(player1.Head_rot))) + player1.trans_Z);
-	cameraDirection = glm::vec3( player1.trans_X, player1.trans_Y, player1.trans_Z);
+	cameraPos = glm::vec3(-(2 * cos(-glm::radians(player1.Head_rot))) + player1.trans_X, player1.trans_Y + 0.5, -(2 * sin(-glm::radians(player1.Head_rot))) + player1.trans_Z);
+	cameraDirection = glm::vec3(player1.trans_X, player1.trans_Y, player1.trans_Z);
 	cameraUP = glm::vec3(0.0f, 0.5f, 0.0f);
 	player1.Draw();
 	player2.Draw();
 	map.Draw();
 	for (int i = 0; i < 6; ++i) {
 		ob[i].Draw();
+	}
+	for (int i = 0; i < 3; ++i) {
+		bob[i].Draw();
 	}
 	glViewport(640, 0, 640, 800);
 	cameraPos = glm::vec3(-(2 * cos(-glm::radians(player2.Head_rot))) + player2.trans_X, player2.trans_Y + 0.5, -(2 * sin(-glm::radians(player2.Head_rot))) + player2.trans_Z);
@@ -1080,7 +1248,10 @@ void drawScene()
 	map.Draw();
 	for (int i = 0; i < 6; ++i) {
 		ob[i].Draw();
-	};
+	}
+	for (int i = 0; i < 3; ++i) {
+		bob[i].Draw();
+	}
 
 
 	glutSwapBuffers();
@@ -1108,9 +1279,97 @@ int Zdirection_2 = 0;
 int Xdirection_1 = 0;
 int Xdirection_2 = 0;
 void Timer(int value) {
-	
+	// 장애물과 플레이어의 충돌
+	for (int i = 0; i < 6; ++i) {
+		if (collide(&interbb, player1.get_bb(), ob[i].get_bb())) {
+			Set_bb(&interbb, 0, 0, interbb.right - interbb.left, interbb.bottom - interbb.top);
+			//위 아래 충돌
+			if (interbb.right > interbb.bottom)
+			{
+				if (player1.trans_Z < ob[i].trans_Z)
+					player1.trans_Z -= interbb.bottom;
+				else
+					player1.trans_Z += interbb.bottom;
+				
+			}
+			//오른쪽 왼쪽 충돌
+			else
+			{
+				if (player1.trans_X < ob[i].trans_X)
+					player1.trans_X -= interbb.right;
+				else
+					player1.trans_X += interbb.right;
+				
+			}
+		}
+		if (collide(&interbb, player2.get_bb(), ob[i].get_bb())) {
+			Set_bb(&interbb, 0, 0, interbb.right - interbb.left, interbb.bottom - interbb.top);
+			//위 아래 충돌
+			if (interbb.right > interbb.bottom)
+			{
+				if (player2.trans_Z < ob[i].trans_Z)
+					player2.trans_Z -= interbb.bottom;
+				else
+					player2.trans_Z += interbb.bottom;
+
+			}
+			//오른쪽 왼쪽 충돌
+			else
+			{
+				if (player2.trans_X < ob[i].trans_X)
+					player2.trans_X -= interbb.right;
+				else
+					player2.trans_X += interbb.right;
+
+			}
+		}
+	}
+	for (int i = 0; i < 3; ++i) {
+		if (collide(&interbb, player1.get_bb(), bob[i].get_bb())) {
+			Set_bb(&interbb, 0, 0, interbb.right - interbb.left, interbb.bottom - interbb.top);
+			//위 아래 충돌
+			if (interbb.right > interbb.bottom)
+			{
+				if (player1.trans_Z < bob[i].trans_Z)
+					player1.trans_Z -= interbb.bottom;
+				else
+					player1.trans_Z += interbb.bottom;
+
+			}
+			//오른쪽 왼쪽 충돌
+			else
+			{
+				if (player1.trans_X < bob[i].trans_X)
+					player1.trans_X -= interbb.right;
+				else
+					player1.trans_X += interbb.right;
+
+			}
+		}
+		if (collide(&interbb, player2.get_bb(), bob[i].get_bb())) {
+			Set_bb(&interbb, 0, 0, interbb.right - interbb.left, interbb.bottom - interbb.top);
+			//위 아래 충돌
+			if (interbb.right > interbb.bottom)
+			{
+				if (player2.trans_Z < bob[i].trans_Z)
+					player2.trans_Z -= interbb.bottom;
+				else
+					player2.trans_Z += interbb.bottom;
+
+			}
+			//오른쪽 왼쪽 충돌
+			else
+			{
+				if (player2.trans_X < bob[i].trans_X)
+					player2.trans_X -= interbb.right;
+				else
+					player2.trans_X += interbb.right;
+
+			}
+		}
+	}
 	if (GetAsyncKeyState('W') & 0x8000) {
-	
+
 		player1.trans_X += (SPEED * cos(glm::radians(player1.Head_rot)));
 		player1.trans_Z += -(SPEED * sin(glm::radians(player1.Head_rot)));
 		Zdirection_1 = 1;
@@ -1120,7 +1379,7 @@ void Timer(int value) {
 		player1.trans_Z += (SPEED * sin(glm::radians(player1.Head_rot)));
 		Zdirection_1 = -1;
 	}
-	else{
+	else {
 		Zdirection_1 = 0;
 	}
 
@@ -1134,7 +1393,7 @@ void Timer(int value) {
 		player1.trans_Z += (SPEED * sin(glm::radians(player1.Head_rot + 90)));
 		Xdirection_1 = 1;
 	}
-	else{
+	else {
 		Xdirection_1 = 0;
 	}
 
@@ -1144,7 +1403,7 @@ void Timer(int value) {
 	else if (GetAsyncKeyState('B') & 0x8000) {
 		player1.Head_rot -= 3.0;
 	}
-	
+
 	if (Zdirection_1 == 1) {
 		if (Xdirection_1 == 0)
 			player1.Body_rot = player1.Head_rot;
@@ -1169,7 +1428,7 @@ void Timer(int value) {
 		if (Xdirection_1 == -1)
 			player1.Body_rot = -225 + player1.Head_rot;
 	}
-	
+
 	//----------------------------------------------------------------
 	if (GetAsyncKeyState(VK_UP) & 0x8000) {
 
@@ -1180,7 +1439,7 @@ void Timer(int value) {
 	else if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
 		player2.trans_X += -(SPEED * cos(glm::radians(player2.Head_rot)));
 		player2.trans_Z += (SPEED * sin(glm::radians(player2.Head_rot)));
-		Zdirection_2= -1;
+		Zdirection_2 = -1;
 	}
 	else {
 		Zdirection_2 = 0;
