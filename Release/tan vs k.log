@@ -1,0 +1,38 @@
+﻿LINK : warning C4744: 'class Tank1 player1'의 형식이 'd:\programming\tan vs k\tan vs k\main.cpp'과(와) 'd:\programming\tan vs k\tan vs k\ex.cpp'에서 서로 다릅니다('struct (2748 bytes)', 'union (2092 bytes)').
+main.obj : error LNK2005: "int Xdirection_1" (?Xdirection_1@@3HA)이(가) ex.obj에 이미 정의되어 있습니다.
+main.obj : error LNK2005: "int Xdirection_2" (?Xdirection_2@@3HA)이(가) ex.obj에 이미 정의되어 있습니다.
+main.obj : error LNK2005: "unsigned int nomal_shader_ID" (?nomal_shader_ID@@3IA)이(가) ex.obj에 이미 정의되어 있습니다.
+main.obj : error LNK2005: "bool line" (?line@@3_NA)이(가) ex.obj에 이미 정의되어 있습니다.
+main.obj : error LNK2005: "int Zdirection_2" (?Zdirection_2@@3HA)이(가) ex.obj에 이미 정의되어 있습니다.
+main.obj : error LNK2005: "int Zdirection_1" (?Zdirection_1@@3HA)이(가) ex.obj에 이미 정의되어 있습니다.
+main.obj : error LNK2005: "class Tank1 player1" (?player1@@3VTank1@@A)이(가) ex.obj에 이미 정의되어 있습니다.
+ex.obj : error LNK2005: "void __cdecl Timer(int)" (?Timer@@YAXH@Z)이(가) ex.obj에 이미 정의되어 있습니다.
+ex.obj : error LNK2005: "void __cdecl Keyboard(unsigned char,int,int)" (?Keyboard@@YAXEHH@Z)이(가) ex.obj에 이미 정의되어 있습니다.
+ex.obj : error LNK2005: "void __cdecl drawScene(void)" (?drawScene@@YAXXZ)이(가) ex.obj에 이미 정의되어 있습니다.
+ex.obj : error LNK2005: "void __cdecl setshader(void)" (?setshader@@YAXXZ)이(가) ex.obj에 이미 정의되어 있습니다.
+ex.obj : error LNK2005: "unsigned int __cdecl complie_shaders(void)" (?complie_shaders@@YAIXZ)이(가) ex.obj에 이미 정의되어 있습니다.
+ex.obj : error LNK2005: "char * __cdecl filetobuf(char const *)" (?filetobuf@@YAPADPBD@Z)이(가) ex.obj에 이미 정의되어 있습니다.
+ex.obj : error LNK2005: _main이(가) ex.obj에 이미 정의되어 있습니다.
+ex.obj : error LNK2005: "public: void __thiscall Tank1::initBuffer(void)" (?initBuffer@Tank1@@QAEXXZ)이(가) ex.obj에 이미 정의되어 있습니다.
+ex.obj : error LNK2001: __imp____glewEnableVertexAttribArray 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewBindVertexArray 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewUseProgram 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewVertexAttribPointer 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewGetShaderiv 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewCompileShader 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewCreateShader 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewBindBuffer 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewCreateProgram 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewGetShaderInfoLog 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewGetUniformLocation 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewBufferData 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewAttachShader 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewShaderSource 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewGenVertexArrays 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewUniformMatrix4fv 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp__glewExperimental 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewGenBuffers 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewDeleteShader 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp____glewLinkProgram 외부 기호를 확인할 수 없습니다.
+ex.obj : error LNK2001: __imp__glewInit@0 외부 기호를 확인할 수 없습니다.
+D:\Programming\tan vs k\Release\tan vs k.exe : fatal error LNK1120: 21개의 확인할 수 없는 외부 참조입니다.
