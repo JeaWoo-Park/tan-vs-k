@@ -1506,7 +1506,6 @@ void drawScene()
 	if (gameover == 0) {
 		
 		frame_time = (std::chrono::system_clock::now() - curr_time);
-		std::cout << 1.0 / frame_time.count() << std::endl;
 		curr_time = std::chrono::system_clock::now();
 		glClearColor(1.0, 1.0, 1.0, 1.0f);
 
@@ -1591,7 +1590,6 @@ int Zdirection_2 = 0;
 int Xdirection_1 = 0;
 int Xdirection_2 = 0;
 void Timer(int value) {
-	std::cout << "1 " << std::endl;
 	if (collide(&interbb, player1.get_bb(), player2.b.get_bb())) {
 		mciSendCommand(dwID2, MCI_CLOSE, 0, NULL);
 		mciSendCommand(dwID3, MCI_CLOSE, 0, NULL);
